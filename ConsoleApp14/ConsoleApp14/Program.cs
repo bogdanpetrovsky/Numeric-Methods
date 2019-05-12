@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
+using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -148,20 +150,20 @@ namespace ConsoleApp14
             double[,] matrix = new double[(n2 * (3 * n1 + 2) + 2 * n1 + 1), 2];
             nodecount = n2 * (3 * n1 + 2) + 2 * n1 + 1;
             nodes = new int[n2 * (3 * n1 + 2) + 2 * n1 + 1];
-
+            //Console.WriteLine(a + " " + b + " " + c + " " + d);
             if (n1 < n2)
             {
                 int k = 0;
                 int kek = 0;
-                for (double y = c; y <= d + 0.0001; y += h2 / 2)
+                for (double y = c; y <= d + 0.01; y += h2 / 2)
                 {
-                    if (y > d && y < d + 0.0001)
+                    if (y > d - 0.01 && y < d + 0.1)
                         y = d;
                     if (kek % 2 == 0)
                     {
-                        for (double x = a; x <= b + 0.0001; x += h1 / 2)
+                        for (double x = a; x <= b + 0.01; x += h1 / 2)
                         {
-                            if (x > b && x < b + 0.0001)
+                            if (x > b - 0.01 && x < b + 0.1)
                                 x = b;
                             matrix[k, 0] = x;
                             matrix[k, 1] = y;
@@ -207,9 +209,9 @@ namespace ConsoleApp14
                     }
                     else
                     {
-                        for (double x = a; x <= b + 0.0001; x += h1)
+                        for (double x = a; x <= b + 0.01; x += h1)
                         {
-                            if (x > b && x < b + 0.0001)
+                            if (x > b - 0.01 && x < b + 0.1)
                                 x = b;
                             matrix[k, 0] = x;
                             matrix[k, 1] = y;
@@ -260,15 +262,15 @@ namespace ConsoleApp14
             {
                 int k = 0;
                 int kek = 0;
-                for (double x = a; x <= b + 0.0001; x += h1 / 2)
+                for (double x = a; x <= b + 0.01; x += h1 / 2)
                 {
-                    if (x > b && x < b + 0.0001)
+                    if (x > b - 0.01 && x < b + 0.1)
                         x = b;
                     if (kek % 2 == 0)
                     {
-                        for (double y = c; y <= d + 0.0001; y += h2 / 2)
+                        for (double y = c; y <= d + 0.01; y += h2 / 2)
                         {
-                            if (y > d && y < d + 0.0001)
+                            if (y > d - 0.01 && y < d + 0.1)
                                 y = d;
                             matrix[k, 0] = x;
                             matrix[k, 1] = y;
@@ -313,9 +315,9 @@ namespace ConsoleApp14
                     }
                     else
                     {
-                        for (double y = c; y <= d + 0.0001; y += h2)
+                        for (double y = c; y <= d + 0.01; y += h2)
                         {
-                            if (y > d && y < d + 0.0001)
+                            if (y > d - 0.01 && y < d + 0.1)
                                 y = d;
                             matrix[k, 0] = x;
                             matrix[k, 1] = y;
@@ -837,28 +839,39 @@ namespace ConsoleApp14
                     {
                         temp[mult] *= EX;
                         GlobalB[i,mult] += temp[mult];
+
                     }
+                    //R48_1
+                    //for (int jk = 0; jk < 48; jk++)
+                    //{
+                    //    Console.Write(GlobalB[0, jk] + " ");
+                    //}
+                    //Console.WriteLine();
 
+                    //if (i == 0 && j == 0)
+                    //{
+                    //    Console.WriteLine("48x48 Matrix on the first finite element: ");
+                    //    Console.WriteLine();
+                    //    for (int l = 0; l < 48; l++)
+                    //    {
+                    //        for (int l1 = 0; l1 < 48; l1++)
+                    //        {
+                    //            Console.Write(M[l, l1] + " ");
 
-                    
-                    if (i == 0 && j == 0)
-                    {
-                        Console.WriteLine("48x48 Matrix on the first finite element: ");
-                        Console.WriteLine();
-                        for (int l = 0; l < 48; l++)
-                        {
-                            for (int l1 = 0; l1 < 48; l1++)
-                            {
-                                Console.Write(M[l, l1] + " ");
-
-                            }
-                            Console.WriteLine();
-                        }
-                    }
+                    //        }
+                    //        Console.WriteLine();
+                    //    }
+                    //}
                 }
 
+                if (i == 3)
+                {
+                    int dh = 0;
+                }
+                //Console.WriteLine("Element : " + i );
                 for (int t = 0;t<8;t++)
                 {
+                    //Console.WriteLine(elements[i,t]+ " ("+ matrix[elements[i,t],0] + " , " + matrix[elements[i,t],1] + " )" + " ->" + nodes[elements[i,t]] +  " ");
                     if (nodes[elements[i, t]] == 0)
                         continue;
                     else
@@ -938,6 +951,7 @@ namespace ConsoleApp14
                         }
                     }
                 }
+                //Console.WriteLine(); Console.WriteLine();
 
                 for (int k = 0; k < 48; k++)
                 {
@@ -951,16 +965,24 @@ namespace ConsoleApp14
                 {
                     for (int k3 = 0; k3 < 48; k3++)
                     {
+                        
                         M[k, k3] = 0;
                     }
                 }
             }
+            //R48
+            //for (int j = 0; j < 48; j++)
+            //{
+            //    Console.Write(GlobalB[3, j] + " ");
+            //}
+            //Console.WriteLine();
+
             //Console.WriteLine("Array 48 x 1");
             //for (int i = 0; i < N; i++)
             //{
             //    for (int j = 0; j < 48; j++)
             //    {
-            //        Console.Write(GlobalB[i,j] + " ");
+            //        Console.Write(GlobalB[i, j] + " ");
             //    }
             //    Console.WriteLine();
             //}
@@ -973,16 +995,21 @@ namespace ConsoleApp14
             int j1 = 0, j2 = 0;
             for(int i =0;i<n1*n2;i++)
             {
+
                 for(int t1= 0;t1 < 8;t1++)
                 {
-                    for(int t2 = 0;t2 < 8;t2++)
+                    for (int count = 0; count < 6; count++)
+                    {
+                        Barray[elements[i, t1] * 6 + count] += globalb[i, t1 * 6 + count];
+                    }
+                    for (int t2 = 0;t2 < 8;t2++)
                     {
                         for(int iter1 = elements[i, t1]*6;iter1 < (elements[i,t1] + 1)*6;iter1++)
                         {
-                            for(int iter2 = elements[i, t2] * 6; iter2 < (elements[i, t2] + 1) * 6; iter2++)
+                            
+                            for (int iter2 = elements[i, t2] * 6; iter2 < (elements[i, t2] + 1) * 6; iter2++)
                             {
                                 Global[iter1, iter2] += MM[i, t1 * 6 + j1, t2 * 6 + j2];
-                                Barray[iter2] += globalb[i, t2*6 + j2];
                                 j2++;
                             }
                             j1++;
@@ -1019,30 +1046,30 @@ namespace ConsoleApp14
             MatrixElements(n1, n2);
             doAllInTask2(n1 * n2);
             setGlobal(GlobalB);
-            Console.WriteLine();
-            Console.WriteLine("DetJe : " + DetJe(0, 0));
-            Console.WriteLine();
-            Console.WriteLine("CL matrix on the first finite element and Gauss node: " );
-            for (int i = 0; i < 11; i++)
-            {
-                for (int j = 0; j < 6; j++)
-                {
+            //Console.WriteLine();
+            //Console.WriteLine("DetJe : " + DetJe(0, 0));
+            //Console.WriteLine();
+            //Console.WriteLine("CL matrix on the first finite element and Gauss node: " );
+            //for (int i = 0; i < 11; i++)
+            //{
+            //    for (int j = 0; j < 6; j++)
+            //    {
 
-                    Console.Write("{0} ", check[i, j]);
-                }
-                Console.WriteLine();
-            }
-            Console.WriteLine();
-            Console.WriteLine("48x48 on first finite element:");
-            Console.WriteLine();
-            for (int j = 0; j < 48; j++)
-            {
-                for (int l = 0; l < 48; l++)
-                {
-                    Console.Write(MM[0, j, l] + "\t");
-                }
-                Console.WriteLine();
-            }
+            //        Console.Write("{0} ", check[i, j]);
+            //    }
+            //    Console.WriteLine();
+            //}
+            //Console.WriteLine();
+            //Console.WriteLine("48x48 on first finite element:");
+            //Console.WriteLine();
+            //for (int j = 0; j < 48; j++)
+            //{
+            //    for (int l = 0; l < 48; l++)
+            //    {
+            //        Console.Write(MM[0, j, l] + "\t");
+            //    }
+            //    Console.WriteLine();
+            //}
             Console.WriteLine();
             Console.WriteLine("Nodecount x 6 matrix:");
             Console.WriteLine();
@@ -1057,9 +1084,11 @@ namespace ConsoleApp14
             Console.WriteLine("B_Array print:");
             for (int i = 0; i < nodecount * 6; i++)
             {
+                if(i%6 == 0)
+                    Console.WriteLine();
                 Console.Write(Barray[i] + " ");
             }
-
+            Console.WriteLine();
         }
     }
 }
