@@ -35,6 +35,8 @@ namespace ConsoleApp14
 
         public static double[,] GlobalB;
 
+        public static double[,] LastOne;
+
         public static double[,] G = new double[9, 2];
 
         public static double[,] B = new double[11, 11];
@@ -990,6 +992,7 @@ namespace ConsoleApp14
 
         public static void setGlobal(double[,] globalb)
         {
+            LastOne = new double[nodecount * 6, (nodecount * 6) + 1];
             Global = new double[nodecount*6, nodecount* 6];
             Barray = new double[nodecount * 6];
             int j1 = 0, j2 = 0;
@@ -1020,6 +1023,20 @@ namespace ConsoleApp14
                     }
                 }
             }
+
+            for (int i = 0; i < nodecount * 6; i++)
+            {
+                for (int j = 0; j < nodecount * 6; j++)
+                {
+                    LastOne[i, j] = Global[i, j];
+
+                }
+            }
+
+            for (int i = 0; i < nodecount * 6; i++)
+            {
+                LastOne[i, nodecount*6] = Barray[i];
+            }
         }
 
         public static double[,] Transpose(double[,] a, int n, int m)
@@ -1035,6 +1052,35 @@ namespace ConsoleApp14
             return result;
         }
 
+
+        public static double[] Gauss(int m,int n, double[,] matrix)
+        {
+            double tmp;
+            double[] xx = new double [m];
+            int k;
+
+            for (int i = 0; i < n; i++)
+            {
+                tmp = matrix[i,i];
+                for (int j = n; j >= i; j--)
+                    matrix[i,j] /= tmp;
+                for (int j1 = i + 1; j1 < n; j1++)
+                {
+                    tmp = matrix[j1,i];
+                    for (k = n; k >= i; k--)
+                        matrix[j1,k] -= tmp * matrix[i,k];
+                }
+            }
+
+            xx[n - 1] = matrix[n - 1,n];
+            for (int i = n - 2; i >= 0; i--)
+            {
+                xx[i] = matrix[i,n];
+                for (int j = i + 1; j < n; j++) xx[i] -= matrix[i,j] * xx[j];
+            }
+
+            return xx;
+        }
 
         static void Main(string[] args)
         {
@@ -1087,6 +1133,13 @@ namespace ConsoleApp14
                 if(i%6 == 0)
                     Console.WriteLine();
                 Console.Write(Barray[i] + " ");
+            }
+            Console.WriteLine();
+            Console.WriteLine("Answers:");
+            double[] answer = Gauss(nodecount * 6, nodecount * 6, LastOne);
+            for (int i = 0; i < nodecount * 6; i++)
+            {
+                Console.WriteLine(answer[i] + " ");
             }
             Console.WriteLine();
         }
